@@ -1,8 +1,12 @@
+import PokemonType from "../graphql_types/PokemonType";
+
 export { }
 
 const graphql = require('graphql')
 const Pokemon = require('../models/Pokemon')
 const { addPokemonToDB } = require('../utils/addPokemon')
+
+const axios = require('axios')
 
 const {
   GraphQLObjectType,
@@ -11,44 +15,31 @@ const {
   GraphQLID,
   GraphQLInt,
   GraphQLList,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLObject
 } = graphql;
-
-const AbilityType = new GraphQLObjectType({
-  name: 'Ability',
-  fields: () => ({
-    ability: {
-      name: { type: String },
-      url: { type: String }
-    },
-    is_hidden: { type: Boolean },
-    slot: { type: Number }
-  })
-})
-
-const PokemonType = new GraphQLObjectType({
-  name: 'Pokemon',
-  fields: () => ({
-    id: { type: GraphQLID },
-    pokedexNumber: { type: GraphQLInt },
-
-  })
-})
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
     pokemon: {
-      type: PokemonType,
+      type: GraphQLInt,
       args: { pokedexNumber: { type: GraphQLInt } },
       resolve(parent: any, args: any) {
-        return Pokemon.findOne({ pokedexNumber: args.pokedexNumber })
+        const fetchFromAPI = async () => {
+          const response = await axios.get('https://pokeapi.co/api/v2/pokemon/charizard')
+          console.log(response.data)
+          return 1
+        }
+        fetchFromAPI()
+        // return Pokemon.findOne({ pokedexNumber: args.pokedexNumber })
       }
     },
     allPokemon: {
-      type: new GraphQLList(PokemonType),
+      type: GraphQLInt,
       resolve(parent: any, args: any) {
-        return Pokemon.find({})
+        return 1
+        // return Pokemon.find({})
       }
     }
   }
@@ -62,10 +53,20 @@ const Mutation = new GraphQLObjectType({
       args: {
         pokedexNumber: { type: GraphQLInt }
       },
-      resolve: async (parent: any, args: any) => {
-        const results = await addPokemonToDB(args.pokedexNumber)
-        console.log(results)
-        return results
+      resolve(parent: any, args: any) {
+        const fetchFromAPI = async () => {
+          console.log(args)
+          const response = await axios.get('https://pokeapi.co/api/v2/pokemon/charizard')
+          console.log(response.data)
+          const { id, ...others } = response.data
+          const pokemon = new Pokemon({
+            pokedexNumber: id,
+            ...others
+          })
+          return pokemon
+        }
+
+        fetchFromAPI()
       }
     }
   }

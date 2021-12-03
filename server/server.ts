@@ -10,6 +10,7 @@ const database = require('./database/connection');
 const app = express()
 
 app.use(cors())
+app.use(logger('dev'))
 
 // bind express with graphql
 app.use('/graphql', graphqlHTTP({

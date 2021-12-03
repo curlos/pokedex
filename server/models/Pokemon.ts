@@ -4,6 +4,7 @@ const mongoose = require('Mongoose')
 const Schema = mongoose.Schema
 
 const pokemonSchema = new Schema({
+  pokedexNumber: { type: Number, required: true },
   abilities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ability' }],
   base_experience: { type: Number, required: true },
   forms: [{
@@ -13,7 +14,6 @@ const pokemonSchema = new Schema({
   game_indices: [{ type: mongoose.Schema.Types.ObjectId, ref: 'GameIndex' }],
   height: { type: Number },
   held_items: [],
-  id: { type: Number },
   is_default: { type: Boolean },
   location_area_encounters: { type: String, required: true },
   moves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Move' }],
