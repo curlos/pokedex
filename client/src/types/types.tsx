@@ -1,4 +1,5 @@
 export interface PokemonType {
+  id: number,
   abilities: [{
     ability: {
       name: string,

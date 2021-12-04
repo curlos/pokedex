@@ -8,14 +8,27 @@ const StyledApp = styled('div', {
   backgroundImage: `url("/assets/bg-light-20.png")`,
   backgroundSize: 'cover',
   margin: '0',
-  padding: '0'
+  padding: '0',
+  minHeight: '100vh',
+  minWidth: '100vw'
 })
 
+const StyledLogo = styled('div')`
+  display: flex;
+  justify-content: center;
+`
+
+const StyledImg = styled('img')`
+  height: 200px;
+`
 
 const App = () => {
   return (
     <StyledApp>
-      <img src="https://archives.bulbagarden.net/media/upload/8/8b/20th_Anniversary_logo.png" />
+      <StyledLogo>
+        <StyledImg src="/assets/logo.png" />
+      </StyledLogo>
+
       <PokemonList />
     </StyledApp>
   );
